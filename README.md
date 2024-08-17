@@ -26,5 +26,4 @@ Key points
 - Penerapan Depedency Injection menjadi nilai plus.
 
 Deliverables
-Silakan fork repository ini dan submit link repository hasil pengerjaan Anda ke .
-
+Silakan fork repository ini dan submit link repository hasil pengerjaan Anda ke https://forms.gle/RsZxD13djB4d7Jzq8.
