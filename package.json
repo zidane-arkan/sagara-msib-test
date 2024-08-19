@@ -1,0 +1,11 @@
+{
+  "name": "sagara-msib-test",
+  "version": "1.0.0",
+  "description": "Create to complete the test from sagara company",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC"
+}
