@@ -24,15 +24,15 @@ class ClothesService {
   }
 
   async deleteCloth(id) {
-    return await clothesRepository.deleteClothes({ id });
+    return await clothesRepository.deleteClothes(id);
   }
 
   async increaseStock(id, amount) {
-    return await clothesRepository.incrementStock({ id, amount });
+    return await clothesRepository.incrementStock(id, amount);
   }
 
   async reduceStock(id, amount) {
-    return await clothesRepository.decreaseStock({ id, amount });
+    return await clothesRepository.decreaseStock(id, amount);
   }
 
   async getLowStockClothes() {

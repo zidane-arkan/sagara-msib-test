@@ -12,7 +12,11 @@ app.use(express.json());
 app.use("/api", clothesRoutes);
 
 // Database Connection
-connectDB();
+if (process.env.NODE_ENV !== "test") {
+  connectDB();
+}
 
 const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => console.log(`Server Listening on port : ${PORT}`));
+
+module.exports = app;
