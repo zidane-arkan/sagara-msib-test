@@ -59,6 +59,20 @@ describe("Clothes API", () => {
     expect(res.body).toMatchSnapshot();
   });
 
+  it("Seharusnya menunjukkan baju yang stoknya habis", async () => {
+    const res = await request(app).get("/api/clothes/out-of-stock");
+    expect(res.statusCode).toEqual(200);
+    expect(Array.isArray(res.body)).toBeTruthy();
+    expect(res.body).toMatchSnapshot();
+  });
+
+  it("Seharusnya menunjukkan baju yang stoknya rendah (< 5)", async () => {
+    const res = await request(app).get("/api/clothes/low-stock");
+    expect(res.statusCode).toEqual(200);
+    expect(Array.isArray(res.body)).toBeTruthy();
+    expect(res.body).toMatchSnapshot();
+  });
+
   it("Seharusnya mengembalikan baju yang sesuai warna dan ukuran", async () => {
     await request(app).post("/api/clothes").send({
       name: "Kaos Naruto",
