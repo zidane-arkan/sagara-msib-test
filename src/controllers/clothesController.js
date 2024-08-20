@@ -40,8 +40,9 @@ class ClothesController {
   }
 
   async updateCloth(req, res) {
+    const { id } = req.params;
     try {
-      const clothes = await clothesService.updateCloth(req.body);
+      const clothes = await clothesService.updateCloth(id, req.body);
       res.status(200).json(clothes);
     } catch (error) {
       res.status(500).json({ error: error.message });

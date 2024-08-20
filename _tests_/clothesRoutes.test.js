@@ -34,7 +34,7 @@ describe("Clothes API", () => {
       color: "Hitam",
       size: "XL",
       price: 45000,
-      stock: 2,
+      stock: 0,
     });
     expect(res.statusCode).toEqual(201);
     expect(res.body).toHaveProperty("_id");
@@ -45,6 +45,13 @@ describe("Clothes API", () => {
     expect(res2.body).toMatchSnapshot();
   });
 
+  it("Seharusnya menunjukkan semua baju yang ada (Baik stok kosong atau tidak)", async () => {
+    const res = await request(app).get("/api/clothes");
+    expect(res.statusCode).toEqual(200);
+    expect(Array.isArray(res.body)).toBeTruthy();
+    expect(res.body).toMatchSnapshot();
+  });
+
   it("Seharusnya menunjukkan semua baju yang tersedia", async () => {
     const res = await request(app).get("/api/clothes/available");
     expect(res.statusCode).toEqual(200);
@@ -52,7 +59,47 @@ describe("Clothes API", () => {
     expect(res.body).toMatchSnapshot();
   });
 
-  it("Seharusnya melakukan menambah stock dari baju yang dipilih", async () => {
+  it("Seharusnya mengembalikan baju yang sesuai warna dan ukuran", async () => {
+    await request(app).post("/api/clothes").send({
+      name: "Kaos Naruto",
+      color: "Merah",
+      size: "M",
+      price: 200000,
+      stock: 10,
+    });
+
+    const res = await request(app)
+      .get("/api/clothes/search")
+      .query({ color: "Merah", size: "M" });
+
+    expect(res.statusCode).toEqual(200);
+    expect(Array.isArray(res.body)).toBeTruthy();
+    expect(res.body.length).toBeGreaterThan(0); // Expect at least one matching item
+    expect(res.body).toMatchSnapshot();
+  });
+
+  it("Seharusnya melakukan update atribut baju yang dipilih", async () => {
+    const createCloth = await request(app).post("/api/clothes").send({
+      name: "Kemeja",
+      color: "Ungu",
+      size: "M",
+      price: 50000,
+      stock: 11,
+    });
+    const updateCloth = {
+      color: "Hitam",
+      size: "L",
+      price: 250000,
+      stock: 5,
+    };
+    const res = await request(app)
+      .put(`/api/clothes/${createCloth.body._id}`)
+      .send(updateCloth);
+    expect(res.statusCode).toEqual(200);
+    expect(res.body).toMatchSnapshot();
+  });
+
+  it("Seharusnya melakukan penambahan stock dari baju yang dipilih", async () => {
     const cloth = await request(app).post("/api/clothes").send({
       name: "Kimono",
       color: "Hitam",
@@ -65,6 +112,22 @@ describe("Clothes API", () => {
       .send({ amount: 5, increase: true });
     expect(res.statusCode).toEqual(200);
     expect(res.body.stock).toEqual(10);
+    expect(res.body).toMatchSnapshot();
+  });
+
+  it("Seharusnya melakukan pengurangan stock dari baju yang dipilih", async () => {
+    const cloth = await request(app).post("/api/clothes").send({
+      name: "Kaos",
+      color: "Hitam",
+      size: "L",
+      price: 250000,
+      stock: 5,
+    });
+    const res = await request(app)
+      .patch(`/api/clothes/${cloth.body._id}/stock`)
+      .send({ amount: 3, increase: false });
+    expect(res.statusCode).toEqual(200);
+    expect(res.body.stock).toEqual(2);
     expect(res.body).toMatchSnapshot();
   });
 

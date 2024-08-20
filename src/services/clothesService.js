@@ -20,7 +20,7 @@ class ClothesService {
   }
 
   async updateCloth(id, data) {
-    return await clothesRepository.updateClothes({ id, data });
+    return await clothesRepository.updateClothes(id, data);
   }
 
   async deleteCloth(id) {
@@ -32,7 +32,7 @@ class ClothesService {
   }
 
   async reduceStock(id, amount) {
-    const cloth = clothesRepository.findClothes({ _id: id });
+    const cloth = await clothesRepository.findClothes({ _id: id });
 
     if (cloth[0].stock === 0) {
       throw new Error("Cannot reduce amount bellow 0");
