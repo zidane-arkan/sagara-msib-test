@@ -10,7 +10,7 @@ class ClothesRepository {
    * @param {Object} data - The data for the new cloth.
    * @returns {Promise<Object>} A promise that resolves to the created cloth.
    */
-  async createCloth(data) {
+  async createClothes(data) {
     return await Clothes.create(data);
   }
 
