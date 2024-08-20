@@ -56,4 +56,4 @@ class ClothesController {
   }
 }
 
-module.export = new ClothesController();
+module.exports = new ClothesController();
