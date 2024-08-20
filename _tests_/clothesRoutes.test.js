@@ -20,30 +20,44 @@ afterAll(async () => {
 });
 
 describe("Clothes API", () => {
-  it("should create a new clothing item", async () => {
+  it("Seharusnya menciptakan baju baru", async () => {
     const res = await request(app).post("/api/clothes").send({
-      name: "T-Shirt",
-      color: "Blue",
+      name: "Kemeja",
+      color: "Ungu",
       size: "M",
-      price: 19.99,
-      stock: 10,
+      price: 50000,
+      stock: 11,
+    });
+
+    const res2 = await request(app).post("/api/clothes").send({
+      name: "Jas Hujan",
+      color: "Hitam",
+      size: "XL",
+      price: 45000,
+      stock: 2,
     });
     expect(res.statusCode).toEqual(201);
     expect(res.body).toHaveProperty("_id");
+    expect(res.body).toMatchSnapshot();
+
+    expect(res2.statusCode).toEqual(201);
+    expect(res2.body).toHaveProperty("_id");
+    expect(res2.body).toMatchSnapshot();
   });
 
-  it("should get all available clothes", async () => {
+  it("Seharusnya menunjukkan semua baju yang tersedia", async () => {
     const res = await request(app).get("/api/clothes/available");
     expect(res.statusCode).toEqual(200);
     expect(Array.isArray(res.body)).toBeTruthy();
+    expect(res.body).toMatchSnapshot();
   });
 
-  it("should update the stock of a clothing item", async () => {
+  it("Seharusnya melakukan menambah stock dari baju yang dipilih", async () => {
     const cloth = await request(app).post("/api/clothes").send({
-      name: "Jeans",
-      color: "Black",
+      name: "Kimono",
+      color: "Hitam",
       size: "L",
-      price: 49.99,
+      price: 250000,
       stock: 5,
     });
     const res = await request(app)
@@ -51,17 +65,19 @@ describe("Clothes API", () => {
       .send({ amount: 5, increase: true });
     expect(res.statusCode).toEqual(200);
     expect(res.body.stock).toEqual(10);
+    expect(res.body).toMatchSnapshot();
   });
 
-  it("should delete a clothing item", async () => {
+  it("Seharusnya menghapus baju yang dipilih", async () => {
     const cloth = await request(app).post("/api/clothes").send({
       name: "Hoodie",
-      color: "Gray",
-      size: "XL",
-      price: 39.99,
+      color: "Abu-Abu",
+      size: "M",
+      price: 75600,
       stock: 3,
     });
     const res = await request(app).delete(`/api/clothes/${cloth.body._id}`);
     expect(res.statusCode).toEqual(200);
+    expect(res.body).toMatchSnapshot();
   });
 });
